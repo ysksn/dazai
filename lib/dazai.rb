@@ -11,7 +11,8 @@ module Dazai
     end
 
     def paragraph(title: DEFAULT_BOOK)
-      send(title).sample.join("\n")
+      result = send(title).sample.join("\n")
+      result.match(/\n/) ? result : paragraph(title: title)
     end
 
     def paragraphs(title: DEFAULT_BOOK, count: nil)
@@ -26,7 +27,7 @@ module Dazai
 
     private
 
-    %w[romanesque].each do |title|
+    [DEFAULT_BOOK].each do |title|
       define_method(title) do
         return class_variable_get(:"@@#{title}") if class_variable_defined?(:"@@#{title}")
         save(title)
